@@ -1,0 +1,15 @@
+#productContainer {
+  display: flex;
+  flex-flow: row wrap;
+}
+.productItem {
+  width: 33%;
+  margin: 0 auto 10%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.itemImg {
+  width: 50%;
+  /* height: 50%; */
+}
