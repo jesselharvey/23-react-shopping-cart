@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { addItem } from "../cart/cartSlice"
+import { selectProductList, getProducts } from "../products/productSlice"
 import "./Products.css"
 
 export function ProductList() {
   const dispatch = useDispatch()
 
-  const [products, setProducts] = useState([])
+  const products = useSelector(selectProductList)
 
   useEffect(() => {
-    axios.get("http://localhost:3001/products").then((resp) => {
-      let productList = resp.data
-      setProducts(productList)
-    })
+    dispatch(getProducts())
   }, [])
+
   let installation = (price, installments) => {
     return (price / installments).toFixed(2)
   }

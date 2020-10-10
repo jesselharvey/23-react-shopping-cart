@@ -9,15 +9,28 @@ export const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       //how do I add key pair to object?
-      const product = action.payload
-      product.quantity = 1
+      const product = { ...action.payload }
 
-      
-      state.cartList.push(product)
+      if (state.cartList.find((item) => item.sku === product.sku)) {
+        state.cartList = state.cartList.map((item) => {
+          if (item.sku === product.sku) {
+            return {
+              ...item,
+              quantity: item.quantity + 1,
+            }
+          }
+          return item
+        })
+      } else {
+        product.quantity = 1
+        state.cartList.push(product)
+      }
     },
     removeItem: (state, action) => {
-      state.cartList = state.cartList.filter(item => item.sku !== action.payload)
-    }
+      state.cartList = state.cartList.filter(
+        (item) => item.sku !== action.payload
+      )
+    },
   },
 })
 console.log(cartSlice)
