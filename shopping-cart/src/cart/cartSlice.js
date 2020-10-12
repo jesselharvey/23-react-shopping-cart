@@ -5,11 +5,14 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cartList: [],
+    subtotal: [],
   },
   reducers: {
     addItem: (state, action) => {
       //how do I add key pair to object?
       const product = { ...action.payload }
+
+      state.subtotal.push(product.price)
 
       if (state.cartList.find((item) => item.sku === product.sku)) {
         state.cartList = state.cartList.map((item) => {
@@ -18,6 +21,7 @@ export const cartSlice = createSlice({
               ...item,
               quantity: item.quantity + 1,
             }
+            
           }
           return item
         })
@@ -27,19 +31,66 @@ export const cartSlice = createSlice({
       }
     },
     removeItem: (state, action) => {
+
+      state.subtotal.push(-action.payload.price)
+
       state.cartList = state.cartList.filter(
-        (item) => item.sku !== action.payload
+        (item) => item.sku !== action.payload.sku
       )
+    },
+    addQuantity: (state, action) => {
+      const product= { ...action.payload}
+
+      state.subtotal.push(product.price)
+
+      if (state.cartList.find((item) => item.sku === product.sku)) {
+        state.cartList = state.cartList.map((item) => {
+          if (item.sku === product.sku) {
+            return {
+              ...item,
+              quantity: item.quantity + 1
+            }
+
+          }
+          return item
+        })
+      }
+    },
+    subQuantity: (state, action) => {
+      const product= { ...action.payload}
+
+      state.subtotal.push(-product.price)
+
+      if (state.cartList.find((item) => item.sku === product.sku)) {
+        state.cartList = state.cartList.map((item) => {
+          if (item.sku === product.sku) {
+            if (item.quantity === 1) {
+              return item
+            }
+            return {
+              ...item,
+              quantity: item.quantity - 1
+            }
+
+            
+          }
+          return item
+
+        })
+      }
+
     },
   },
 })
-console.log(cartSlice)
 
-export const { addItem, removeItem } = cartSlice.actions
+
+export const { addItem, removeItem, addQuantity, subQuantity} = cartSlice.actions
 
 // export const selectItem = state => state.productItem
 
 export const selectCartList = (state) => state.cart.cartList
-export const selectCartItem = (state) => state.cart.cartList.item
+export const selectSubtotal = (state) => state.cart.subtotal
+// console.log(selectSubtotal)
+// export const selectCartItem = (state) => state.cart.cartList.item
 
 export default cartSlice.reducer
