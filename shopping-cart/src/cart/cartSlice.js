@@ -21,7 +21,6 @@ export const cartSlice = createSlice({
               ...item,
               quantity: item.quantity + 1,
             }
-            
           }
           return item
         })
@@ -31,15 +30,14 @@ export const cartSlice = createSlice({
       }
     },
     removeItem: (state, action) => {
-
-      state.subtotal.push(-action.payload.price)
+      state.subtotal.push(-action.payload.price * action.payload.quantity)
 
       state.cartList = state.cartList.filter(
         (item) => item.sku !== action.payload.sku
       )
     },
     addQuantity: (state, action) => {
-      const product= { ...action.payload}
+      const product = { ...action.payload }
 
       state.subtotal.push(product.price)
 
@@ -48,16 +46,15 @@ export const cartSlice = createSlice({
           if (item.sku === product.sku) {
             return {
               ...item,
-              quantity: item.quantity + 1
+              quantity: item.quantity + 1,
             }
-
           }
           return item
         })
       }
     },
     subQuantity: (state, action) => {
-      const product= { ...action.payload}
+      const product = { ...action.payload }
 
       state.subtotal.push(-product.price)
 
@@ -69,22 +66,22 @@ export const cartSlice = createSlice({
             }
             return {
               ...item,
-              quantity: item.quantity - 1
+              quantity: item.quantity - 1,
             }
-
-            
           }
           return item
-
         })
       }
-
     },
   },
 })
 
-
-export const { addItem, removeItem, addQuantity, subQuantity} = cartSlice.actions
+export const {
+  addItem,
+  removeItem,
+  addQuantity,
+  subQuantity,
+} = cartSlice.actions
 
 // export const selectItem = state => state.productItem
 
